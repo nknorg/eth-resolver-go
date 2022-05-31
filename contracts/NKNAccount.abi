@@ -1,0 +1,83 @@
+[
+  {
+    "inputs": [],
+    "name": "del",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "publicKey",
+        "type": "address"
+      }
+    ],
+    "name": "getNKNAddr",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "identifier",
+            "type": "string"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "publicKey",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct NKNAccount.NKNAddress",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNKNAddr",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "identifier",
+            "type": "string"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "publicKey",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct NKNAccount.NKNAddress",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "identifier",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "publicKey",
+        "type": "bytes32"
+      }
+    ],
+    "name": "set",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
