@@ -7,9 +7,11 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/patrickmn/go-cache"
 	"github.com/wealdtech/go-ens/v3"
 	"log"
 	"strings"
+	"time"
 )
 
 const (
@@ -20,11 +22,12 @@ type EthResolverConfig struct {
 	Prefix          string
 	RpcServer       string
 	ContractAddress string
-	Timeout         int
+	CacheTimeout    int // seconds
 }
 
 type EthResolver struct {
 	config *EthResolverConfig
+	cache  *cache.Cache
 }
 
 func NewEthSolver(config *EthResolverConfig) *EthResolver {
@@ -33,6 +36,7 @@ func NewEthSolver(config *EthResolverConfig) *EthResolver {
 	}
 	return &EthResolver{
 		config: config,
+		cache:  cache.New(time.Duration(config.CacheTimeout)*time.Second, 60*time.Second),
 	}
 }
 
@@ -56,26 +60,40 @@ func (s *EthResolver) Resolve(address string) (string, error) {
 	addr := tail
 	verify := common.IsHexAddress(tail)
 	if !verify {
-		ensAddr, err := ens.Resolve(conn, addr)
-		if err != nil {
-			return "", err
+		ensAddr, ok := s.cache.Get(addr)
+		if ok {
+			addr = ensAddr.(string)
+		} else {
+			ensAddr, err := ens.Resolve(conn, addr)
+			if err != nil {
+				return "", err
+			}
+			addr = ensAddr.Hex()
+			s.cache.Add(tail, addr, 0)
 		}
-		addr = ensAddr.Hex()
-	}
-	res, err := contract.GetNKNAddr(&bind.CallOpts{
-		Pending:     false,
-		From:        common.Address{},
-		BlockNumber: nil,
-		Context:     nil,
-	}, common.HexToAddress(addr))
-	if err != nil {
-		log.Println("NewNKNAccount err", err)
-		return "", err
 	}
 
-	nknAddr := hex.EncodeToString(res.PublicKey[:])
-	if res.Identifier != "" {
-		nknAddr = res.Identifier + "." + hex.EncodeToString(res.PublicKey[:])
+	nknAddrCache, ok := s.cache.Get(addr)
+	var nknAddr string
+	if ok {
+		nknAddr = nknAddrCache.(string)
+	} else {
+		res, err := contract.GetNKNAddr(&bind.CallOpts{
+			Pending:     false,
+			From:        common.Address{},
+			BlockNumber: nil,
+			Context:     nil,
+		}, common.HexToAddress(addr))
+		if err != nil {
+			log.Println("NewNKNAccount err", err)
+			return "", err
+		}
+		nknAddr = hex.EncodeToString(res.PublicKey[:])
+		if res.Identifier != "" {
+			nknAddr = res.Identifier + "." + hex.EncodeToString(res.PublicKey[:])
+		}
+		s.cache.Add(addr, nknAddr, 0)
 	}
+
 	return nknAddr, nil
 }
