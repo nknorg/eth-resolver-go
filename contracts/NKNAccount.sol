@@ -10,7 +10,7 @@ contract NKNAccount {
     mapping(address => NKNAddress) ETHToNKNAddr;
 
     function set(string memory identifier, bytes32 publicKey) public {
-        require(bytes(identifier).length <= 64, "identifier length must be less than 64");
+        require(bytes(identifier).length <= 64, "identifier length must be no longer than 64");
         ETHToNKNAddr[msg.sender] = NKNAddress({identifier: identifier, publicKey: publicKey});
     }
 

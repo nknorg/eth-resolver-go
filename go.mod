@@ -1,4 +1,4 @@
-module ethresolver
+module github.com/nknorg/eth-resolver-go
 
 go 1.18
 
@@ -12,6 +12,7 @@ require (
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/ipfs/go-cid v0.1.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.11 // indirect
 	github.com/minio/blake2b-simd v0.0.0-20160723061019-3f5f724cb5b1 // indirect
