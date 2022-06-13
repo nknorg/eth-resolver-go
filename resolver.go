@@ -2,7 +2,6 @@ package ethresolver
 
 import (
 	"context"
-	"encoding/hex"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -85,13 +84,13 @@ func NewResolver(config *Config) (*Resolver, error) {
 	}, nil
 }
 
-func (s *Resolver) Resolve(address string) (string, error) {
-	if !strings.HasPrefix(address, s.config.Prefix) {
+func (r *Resolver) Resolve(address string) (string, error) {
+	if !strings.HasPrefix(address, r.config.Prefix) {
 		return "", nil
 	}
-	address = address[len(s.config.Prefix):]
+	address = address[len(r.config.Prefix):]
 	addr := address
-	addrCache, ok := s.cache.Get(address)
+	addrCache, ok := r.cache.Get(address)
 	if ok {
 		addr = addrCache.(string)
 		return addr, nil
@@ -99,11 +98,11 @@ func (s *Resolver) Resolve(address string) (string, error) {
 
 	ctx := context.Background()
 	var cancel context.CancelFunc
-	if s.config.DialTimeout > 0 {
-		ctx, cancel = context.WithTimeout(ctx, time.Duration(s.config.DialTimeout)*time.Millisecond)
+	if r.config.DialTimeout > 0 {
+		ctx, cancel = context.WithTimeout(ctx, time.Duration(r.config.DialTimeout)*time.Millisecond)
 		defer cancel()
 	}
-	conn, err := ethclient.DialContext(ctx, s.config.RpcServer)
+	conn, err := ethclient.DialContext(ctx, r.config.RpcServer)
 	if err != nil {
 		return "", err
 	}
@@ -118,12 +117,11 @@ func (s *Resolver) Resolve(address string) (string, error) {
 		addr = ensAddr.Hex()
 	}
 
-	var nknAddr string
-	contract, err := contracts.NewNKNAccount(common.HexToAddress(s.config.ContractAddress), conn)
+	contract, err := contracts.NewNKNAccount(common.HexToAddress(r.config.ContractAddress), conn)
 	if err != nil {
 		return "", err
 	}
-	res, err := contract.GetNKNAddr(&bind.CallOpts{
+	res, err := contract.QueryAddr(&bind.CallOpts{
 		Pending:     false,
 		From:        common.Address{},
 		BlockNumber: nil,
@@ -132,11 +130,6 @@ func (s *Resolver) Resolve(address string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	nknAddr = hex.EncodeToString(res.PublicKey[:])
-	if res.Identifier != "" {
-		nknAddr = res.Identifier + "." + nknAddr
-	}
-	s.cache.Add(address, nknAddr, cache.DefaultExpiration)
-
-	return nknAddr, nil
+	r.cache.Set(address, res, cache.DefaultExpiration)
+	return res, nil
 }

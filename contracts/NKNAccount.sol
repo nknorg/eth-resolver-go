@@ -3,32 +3,28 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 contract NKNAccount {
-    struct NKNAddress {
-        string identifier;
-        bytes32 publicKey;
-    }
-    mapping(address => NKNAddress) ETHToNKNAddr;
+    mapping(address => string) ETHMappings;
 
-    function set(string memory identifier, bytes32 publicKey) public {
-        require(bytes(identifier).length <= 64, "identifier length must be no longer than 64");
-        ETHToNKNAddr[msg.sender] = NKNAddress({identifier: identifier, publicKey: publicKey});
+    function set(string memory addr) public {
+        require(bytes(addr).length != 0, "addr length must be longer than 0");
+        ETHMappings[msg.sender] = addr;
     }
 
     function del() public {
-        NKNAddress memory result = ETHToNKNAddr[msg.sender];
-        require(result.publicKey != bytes32(0));
-        delete ETHToNKNAddr[msg.sender];
+        string memory addr = ETHMappings[msg.sender];
+        require(bytes(addr).length != 0);
+        delete ETHMappings[msg.sender];
     }
 
-    function getNKNAddr() public view returns (NKNAddress memory) {
-        NKNAddress memory result = ETHToNKNAddr[msg.sender];
-        require(result.publicKey != bytes32(0));
-        return result;
+    function getAddr() public view returns (string memory) {
+        string memory addr = ETHMappings[msg.sender];
+        require(bytes(addr).length != 0);
+        return addr;
     }
 
-    function getNKNAddr(address publicKey) public view returns (NKNAddress memory) {
-        NKNAddress memory result = ETHToNKNAddr[publicKey];
-        require(result.publicKey != bytes32(0));
-        return result;
+    function queryAddr(address ethAddr) public view returns (string memory) {
+        string memory addr = ETHMappings[ethAddr];
+        require(bytes(addr).length != 0);
+        return addr;
     }
 }

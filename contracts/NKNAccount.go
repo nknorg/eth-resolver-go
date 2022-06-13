@@ -28,15 +28,9 @@ var (
 	_ = event.NewSubscription
 )
 
-// NKNAccountNKNAddress is an auto generated low-level Go binding around an user-defined struct.
-type NKNAccountNKNAddress struct {
-	Identifier string
-	PublicKey  [32]byte
-}
-
 // NKNAccountMetaData contains all meta data concerning the NKNAccount contract.
 var NKNAccountMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"name\":\"del\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"publicKey\",\"type\":\"address\"}],\"name\":\"getNKNAddr\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"identifier\",\"type\":\"string\"},{\"internalType\":\"bytes32\",\"name\":\"publicKey\",\"type\":\"bytes32\"}],\"internalType\":\"structNKNAccount.NKNAddress\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getNKNAddr\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"identifier\",\"type\":\"string\"},{\"internalType\":\"bytes32\",\"name\":\"publicKey\",\"type\":\"bytes32\"}],\"internalType\":\"structNKNAccount.NKNAddress\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"identifier\",\"type\":\"string\"},{\"internalType\":\"bytes32\",\"name\":\"publicKey\",\"type\":\"bytes32\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[],\"name\":\"del\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAddr\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"ethAddr\",\"type\":\"address\"}],\"name\":\"queryAddr\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"addr\",\"type\":\"string\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // NKNAccountABI is the input ABI used to generate the binding from.
@@ -185,66 +179,66 @@ func (_NKNAccount *NKNAccountTransactorRaw) Transact(opts *bind.TransactOpts, me
 	return _NKNAccount.Contract.contract.Transact(opts, method, params...)
 }
 
-// GetNKNAddr is a free data retrieval call binding the contract method 0xadfddd7e.
+// GetAddr is a free data retrieval call binding the contract method 0xa74c2bb6.
 //
-// Solidity: function getNKNAddr(address publicKey) view returns((string,bytes32))
-func (_NKNAccount *NKNAccountCaller) GetNKNAddr(opts *bind.CallOpts, publicKey common.Address) (NKNAccountNKNAddress, error) {
+// Solidity: function getAddr() view returns(string)
+func (_NKNAccount *NKNAccountCaller) GetAddr(opts *bind.CallOpts) (string, error) {
 	var out []interface{}
-	err := _NKNAccount.contract.Call(opts, &out, "getNKNAddr", publicKey)
+	err := _NKNAccount.contract.Call(opts, &out, "getAddr")
 
 	if err != nil {
-		return *new(NKNAccountNKNAddress), err
+		return *new(string), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(NKNAccountNKNAddress)).(*NKNAccountNKNAddress)
+	out0 := *abi.ConvertType(out[0], new(string)).(*string)
 
 	return out0, err
 
 }
 
-// GetNKNAddr is a free data retrieval call binding the contract method 0xadfddd7e.
+// GetAddr is a free data retrieval call binding the contract method 0xa74c2bb6.
 //
-// Solidity: function getNKNAddr(address publicKey) view returns((string,bytes32))
-func (_NKNAccount *NKNAccountSession) GetNKNAddr(publicKey common.Address) (NKNAccountNKNAddress, error) {
-	return _NKNAccount.Contract.GetNKNAddr(&_NKNAccount.CallOpts, publicKey)
+// Solidity: function getAddr() view returns(string)
+func (_NKNAccount *NKNAccountSession) GetAddr() (string, error) {
+	return _NKNAccount.Contract.GetAddr(&_NKNAccount.CallOpts)
 }
 
-// GetNKNAddr is a free data retrieval call binding the contract method 0xadfddd7e.
+// GetAddr is a free data retrieval call binding the contract method 0xa74c2bb6.
 //
-// Solidity: function getNKNAddr(address publicKey) view returns((string,bytes32))
-func (_NKNAccount *NKNAccountCallerSession) GetNKNAddr(publicKey common.Address) (NKNAccountNKNAddress, error) {
-	return _NKNAccount.Contract.GetNKNAddr(&_NKNAccount.CallOpts, publicKey)
+// Solidity: function getAddr() view returns(string)
+func (_NKNAccount *NKNAccountCallerSession) GetAddr() (string, error) {
+	return _NKNAccount.Contract.GetAddr(&_NKNAccount.CallOpts)
 }
 
-// GetNKNAddr0 is a free data retrieval call binding the contract method 0xba1bf4b7.
+// QueryAddr is a free data retrieval call binding the contract method 0x379eceaf.
 //
-// Solidity: function getNKNAddr() view returns((string,bytes32))
-func (_NKNAccount *NKNAccountCaller) GetNKNAddr0(opts *bind.CallOpts) (NKNAccountNKNAddress, error) {
+// Solidity: function queryAddr(address ethAddr) view returns(string)
+func (_NKNAccount *NKNAccountCaller) QueryAddr(opts *bind.CallOpts, ethAddr common.Address) (string, error) {
 	var out []interface{}
-	err := _NKNAccount.contract.Call(opts, &out, "getNKNAddr0")
+	err := _NKNAccount.contract.Call(opts, &out, "queryAddr", ethAddr)
 
 	if err != nil {
-		return *new(NKNAccountNKNAddress), err
+		return *new(string), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(NKNAccountNKNAddress)).(*NKNAccountNKNAddress)
+	out0 := *abi.ConvertType(out[0], new(string)).(*string)
 
 	return out0, err
 
 }
 
-// GetNKNAddr0 is a free data retrieval call binding the contract method 0xba1bf4b7.
+// QueryAddr is a free data retrieval call binding the contract method 0x379eceaf.
 //
-// Solidity: function getNKNAddr() view returns((string,bytes32))
-func (_NKNAccount *NKNAccountSession) GetNKNAddr0() (NKNAccountNKNAddress, error) {
-	return _NKNAccount.Contract.GetNKNAddr0(&_NKNAccount.CallOpts)
+// Solidity: function queryAddr(address ethAddr) view returns(string)
+func (_NKNAccount *NKNAccountSession) QueryAddr(ethAddr common.Address) (string, error) {
+	return _NKNAccount.Contract.QueryAddr(&_NKNAccount.CallOpts, ethAddr)
 }
 
-// GetNKNAddr0 is a free data retrieval call binding the contract method 0xba1bf4b7.
+// QueryAddr is a free data retrieval call binding the contract method 0x379eceaf.
 //
-// Solidity: function getNKNAddr() view returns((string,bytes32))
-func (_NKNAccount *NKNAccountCallerSession) GetNKNAddr0() (NKNAccountNKNAddress, error) {
-	return _NKNAccount.Contract.GetNKNAddr0(&_NKNAccount.CallOpts)
+// Solidity: function queryAddr(address ethAddr) view returns(string)
+func (_NKNAccount *NKNAccountCallerSession) QueryAddr(ethAddr common.Address) (string, error) {
+	return _NKNAccount.Contract.QueryAddr(&_NKNAccount.CallOpts, ethAddr)
 }
 
 // Del is a paid mutator transaction binding the contract method 0xb6588ffd.
@@ -268,23 +262,23 @@ func (_NKNAccount *NKNAccountTransactorSession) Del() (*types.Transaction, error
 	return _NKNAccount.Contract.Del(&_NKNAccount.TransactOpts)
 }
 
-// Set is a paid mutator transaction binding the contract method 0x2e3196a5.
+// Set is a paid mutator transaction binding the contract method 0x4ed3885e.
 //
-// Solidity: function set(string identifier, bytes32 publicKey) returns()
-func (_NKNAccount *NKNAccountTransactor) Set(opts *bind.TransactOpts, identifier string, publicKey [32]byte) (*types.Transaction, error) {
-	return _NKNAccount.contract.Transact(opts, "set", identifier, publicKey)
+// Solidity: function set(string addr) returns()
+func (_NKNAccount *NKNAccountTransactor) Set(opts *bind.TransactOpts, addr string) (*types.Transaction, error) {
+	return _NKNAccount.contract.Transact(opts, "set", addr)
 }
 
-// Set is a paid mutator transaction binding the contract method 0x2e3196a5.
+// Set is a paid mutator transaction binding the contract method 0x4ed3885e.
 //
-// Solidity: function set(string identifier, bytes32 publicKey) returns()
-func (_NKNAccount *NKNAccountSession) Set(identifier string, publicKey [32]byte) (*types.Transaction, error) {
-	return _NKNAccount.Contract.Set(&_NKNAccount.TransactOpts, identifier, publicKey)
+// Solidity: function set(string addr) returns()
+func (_NKNAccount *NKNAccountSession) Set(addr string) (*types.Transaction, error) {
+	return _NKNAccount.Contract.Set(&_NKNAccount.TransactOpts, addr)
 }
 
-// Set is a paid mutator transaction binding the contract method 0x2e3196a5.
+// Set is a paid mutator transaction binding the contract method 0x4ed3885e.
 //
-// Solidity: function set(string identifier, bytes32 publicKey) returns()
-func (_NKNAccount *NKNAccountTransactorSession) Set(identifier string, publicKey [32]byte) (*types.Transaction, error) {
-	return _NKNAccount.Contract.Set(&_NKNAccount.TransactOpts, identifier, publicKey)
+// Solidity: function set(string addr) returns()
+func (_NKNAccount *NKNAccountTransactorSession) Set(addr string) (*types.Transaction, error) {
+	return _NKNAccount.Contract.Set(&_NKNAccount.TransactOpts, addr)
 }
