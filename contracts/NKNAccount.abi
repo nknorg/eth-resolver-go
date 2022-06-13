@@ -1,83 +1,54 @@
 [
-  {
-    "inputs": [],
-    "name": "del",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "publicKey",
-        "type": "address"
-      }
-    ],
-    "name": "getNKNAddr",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "identifier",
-            "type": "string"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "publicKey",
-            "type": "bytes32"
-          }
+    {
+        "inputs": [],
+        "name": "del",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAddr",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
         ],
-        "internalType": "struct NKNAccount.NKNAddress",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getNKNAddr",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "identifier",
-            "type": "string"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "publicKey",
-            "type": "bytes32"
-          }
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "ethAddr",
+                "type": "address"
+            }
         ],
-        "internalType": "struct NKNAccount.NKNAddress",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "identifier",
-        "type": "string"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "publicKey",
-        "type": "bytes32"
-      }
-    ],
-    "name": "set",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
+        "name": "queryAddr",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "addr",
+                "type": "string"
+            }
+        ],
+        "name": "set",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
 ]
