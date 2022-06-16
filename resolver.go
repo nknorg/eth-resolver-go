@@ -14,24 +14,32 @@ import (
 )
 
 const (
-	PREFIX           = "ETH:"
-	RPC_SERVER       = ""
+	// PREFIX Protocol prefix
+	PREFIX = "ETH:"
+
+	// RPC_SERVER RPC server url
+	RPC_SERVER = ""
+
+	// CONTRACT_ADDRESS Contract address
 	CONTRACT_ADDRESS = ""
 )
 
+// Config is the Resolver configuration.
 type Config struct {
-	Prefix          string
-	RpcServer       string
-	ContractAddress string
-	CacheTimeout    time.Duration // seconds
-	DialTimeout     int           // milliseconds
+	Prefix          string        // Protocol prefix
+	RpcServer       string        // RPC server url
+	ContractAddress string        // Contract address
+	CacheTimeout    time.Duration // Seconds
+	DialTimeout     int           // Milliseconds
 }
 
+// Resolver implement ETH resolver.
 type Resolver struct {
 	config *Config
 	cache  *cache.Cache
 }
 
+// DefaultConfig is the default Resolver config.
 var DefaultConfig = Config{
 	Prefix:          PREFIX,
 	RpcServer:       RPC_SERVER,
@@ -40,10 +48,14 @@ var DefaultConfig = Config{
 	DialTimeout:     5000,
 }
 
+// GetDefaultConfig returns the default Resolver config with nil pointer
+// fields set to default.
 func GetDefaultConfig() *Config {
 	return &DefaultConfig
 }
 
+// MergeConfig merges a given Resolver config with the default Resolver config
+// recursively. Any non zero value fields will override the default config.
 func MergeConfig(config *Config) (*Config, error) {
 	merged := GetDefaultConfig()
 	if config != nil {
@@ -56,6 +68,7 @@ func MergeConfig(config *Config) (*Config, error) {
 	return merged, nil
 }
 
+// NewResolver creates a Resolver. If config is nil, the default Resolver config will be used.
 func NewResolver(config *Config) (*Resolver, error) {
 	config, err := MergeConfig(config)
 	if err != nil {
@@ -84,6 +97,7 @@ func NewResolver(config *Config) (*Resolver, error) {
 	}, nil
 }
 
+// Resolve resolves the address and returns the mapping address.
 func (r *Resolver) Resolve(address string) (string, error) {
 	if !strings.HasPrefix(address, r.config.Prefix) {
 		return "", nil
