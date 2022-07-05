@@ -51,7 +51,8 @@ var DefaultConfig = Config{
 // GetDefaultConfig returns the default Resolver config with nil pointer
 // fields set to default.
 func GetDefaultConfig() *Config {
-	return &DefaultConfig
+	cfg := DefaultConfig
+	return &cfg
 }
 
 // MergeConfig merges a given Resolver config with the default Resolver config
