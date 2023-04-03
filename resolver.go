@@ -7,6 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/imdario/mergo"
 	"github.com/nknorg/eth-resolver-go/contracts"
+	"github.com/nknorg/nkngomobile"
 	"github.com/patrickmn/go-cache"
 	"github.com/wealdtech/go-ens/v3"
 	"strings"
@@ -14,14 +15,8 @@ import (
 )
 
 const (
-	// PREFIX Protocol prefix
-	PREFIX = "ETH:"
-
-	// RPC_SERVER RPC server url
-	RPC_SERVER = ""
-
-	// CONTRACT_ADDRESS Contract address
-	CONTRACT_ADDRESS = ""
+	// DefaultDialTimeout Dial timeout
+	DefaultDialTimeout = 5000
 )
 
 // Config is the Resolver configuration.
@@ -39,26 +34,66 @@ type Resolver struct {
 	cache  *cache.Cache
 }
 
-// DefaultConfig is the default Resolver config.
-var DefaultConfig = Config{
-	Prefix:          PREFIX,
-	RpcServer:       RPC_SERVER,
-	ContractAddress: CONTRACT_ADDRESS,
+// DefaultEthereumConfig is the default Ethereum Resolver config.
+var DefaultEthereumConfig = Config{
+	Prefix:          "ETH:",
+	RpcServer:       "https://rpc.ankr.com/eth",
+	ContractAddress: "0x7BfFaF65698ecA3187CEE7651d0678127Bd7e1e2",
 	CacheTimeout:    cache.NoExpiration,
-	DialTimeout:     5000,
+	DialTimeout:     DefaultDialTimeout,
 }
 
-// GetDefaultConfig returns the default Resolver config with nil pointer
-// fields set to default.
-func GetDefaultConfig() *Config {
-	cfg := DefaultConfig
+// DefaultHarmonyConfig is the default Harmony Resolver config.
+var DefaultHarmonyConfig = Config{
+	Prefix:          "ONE:",
+	RpcServer:       "https://api.harmony.one",
+	ContractAddress: "0x5969aC08B88819201A30CdBaA9D1c5a04Dc0C52d",
+	CacheTimeout:    cache.NoExpiration,
+	DialTimeout:     DefaultDialTimeout,
+}
+
+// DefaultIotexConfig is the default IoTeX Resolver config.
+var DefaultIotexConfig = Config{
+	Prefix:          "IOTX:",
+	RpcServer:       "https://babel-api.mainnet.iotex.io",
+	ContractAddress: "0xFE9Ca78B57D72226266113660e92B111a5D2E316",
+	CacheTimeout:    cache.NoExpiration,
+	DialTimeout:     DefaultDialTimeout,
+}
+
+// DefaultThetaConfig is the default Theta Resolver config.
+var DefaultThetaConfig = Config{
+	Prefix:          "TFUEL:",
+	RpcServer:       "https://eth-rpc-api.thetatoken.org/rpc",
+	ContractAddress: "0x748f7CeF212ce30e6Ce8c176D2b581a3E4EbD729",
+	CacheTimeout:    cache.NoExpiration,
+	DialTimeout:     DefaultDialTimeout,
+}
+
+func GetDefaultEthereumConfig() *Config {
+	cfg := DefaultEthereumConfig
+	return &cfg
+}
+
+func GetDefaultHarmonyConfig() *Config {
+	cfg := DefaultHarmonyConfig
+	return &cfg
+}
+
+func GetDefaultIotexConfig() *Config {
+	cfg := DefaultIotexConfig
+	return &cfg
+}
+
+func GetDefaultThetaConfig() *Config {
+	cfg := DefaultThetaConfig
 	return &cfg
 }
 
 // MergeConfig merges a given Resolver config with the default Resolver config
 // recursively. Any non zero value fields will override the default config.
 func MergeConfig(config *Config) (*Config, error) {
-	merged := GetDefaultConfig()
+	merged := GetDefaultEthereumConfig()
 	if config != nil {
 		err := mergo.Merge(merged, config, mergo.WithOverride)
 		if err != nil {
@@ -96,6 +131,28 @@ func NewResolver(config *Config) (*Resolver, error) {
 		config: config,
 		cache:  cache.New(config.CacheTimeout*time.Second, 60*time.Second),
 	}, nil
+}
+
+// NewDefaultResolvers creates default Resolvers.
+func NewDefaultResolvers() (*nkngomobile.ResolverArray, error) {
+	ethResolver, err := NewResolver(GetDefaultEthereumConfig())
+	if err != nil {
+		return nil, err
+	}
+	oneResolver, err := NewResolver(GetDefaultHarmonyConfig())
+	if err != nil {
+		return nil, err
+	}
+	iotxResolver, err := NewResolver(GetDefaultIotexConfig())
+	if err != nil {
+		return nil, err
+	}
+	thetaResolver, err := NewResolver(GetDefaultThetaConfig())
+	if err != nil {
+		return nil, err
+	}
+	resolvers := nkngomobile.NewResolverArray(ethResolver, oneResolver, iotxResolver, thetaResolver)
+	return resolvers, nil
 }
 
 // Resolve resolves the address and returns the mapping address.
