@@ -202,7 +202,7 @@ func (r *Resolver) ResolveContext(ctx context.Context, address string) (string, 
 		Pending:     false,
 		From:        common.Address{},
 		BlockNumber: nil,
-		Context:     nil,
+		Context:     ctx,
 	}, common.HexToAddress(addr))
 	if err != nil {
 		return "", err
