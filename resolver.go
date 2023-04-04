@@ -2,6 +2,9 @@ package ethresolver
 
 import (
 	"context"
+	"strings"
+	"time"
+
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -10,8 +13,6 @@ import (
 	"github.com/nknorg/nkngomobile"
 	"github.com/patrickmn/go-cache"
 	"github.com/wealdtech/go-ens/v3"
-	"strings"
-	"time"
 )
 
 const (
@@ -155,8 +156,13 @@ func NewDefaultResolvers() (*nkngomobile.ResolverArray, error) {
 	return resolvers, nil
 }
 
-// Resolve resolves the address and returns the mapping address.
+// Resolve wraps ResolveContext with background context.
 func (r *Resolver) Resolve(address string) (string, error) {
+	return r.ResolveContext(context.Background(), address)
+}
+
+// ResolveContext resolves the address and returns the mapping address.
+func (r *Resolver) ResolveContext(ctx context.Context, address string) (string, error) {
 	if !strings.HasPrefix(strings.ToUpper(address), r.config.Prefix) {
 		return "", nil
 	}
@@ -168,7 +174,6 @@ func (r *Resolver) Resolve(address string) (string, error) {
 		return addr, nil
 	}
 
-	ctx := context.Background()
 	var cancel context.CancelFunc
 	if r.config.DialTimeout > 0 {
 		ctx, cancel = context.WithTimeout(ctx, time.Duration(r.config.DialTimeout)*time.Millisecond)
